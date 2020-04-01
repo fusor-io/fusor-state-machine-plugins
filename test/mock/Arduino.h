@@ -14,4 +14,6 @@ typedef __int32_t int32_t;
 typedef unsigned int __uint32_t;
 typedef __uint32_t uint32_t;
 
+inline void delay(unsigned long) {}
+
 #endif

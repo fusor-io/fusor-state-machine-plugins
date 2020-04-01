@@ -1,24 +1,28 @@
 #ifndef plugin_h
 #define plugin_h
 
+#include <map>
 #include <StateMachine.h>
+#include <keycompare.h>
 
-typedef struct PluginAction
-{
-    const char *name;
-    ActionFunction action;
-} PLUGIN_ACTION;
+class Plugin;
+typedef void (*PluginFunction)(Plugin *);
 
 class Plugin
 {
 public:
     Plugin(const char *, StateMachineController *);
 
-    void registerAction(const char *, ActionFunction);
+    StateMachineController *sm;
+    const char *id;
+    static std::map<const char *, PluginFunction, KeyCompare> actionMap;
 
-protected:
-    const char *_id;
-    StateMachineController *_sm;
+    void registerAction(const char *, PluginFunction);
+    void setVar(const char *, int);
+    void setVar(const char *, float);
+
+private:
+    char *withNameSpace(const char *);
 };
 
 #endif

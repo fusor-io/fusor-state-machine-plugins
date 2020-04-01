@@ -12,10 +12,15 @@
 unsigned long _time = 0;
 unsigned long getTime() { return _time; }
 
-TEST(BME280, Init)
+TEST(Plugin, setVar)
 {
   StateMachineController sm = StateMachineController("test", NULL, getTime);
-  bme280 bme = bme280(&sm, 1, 2, true);
+  Plugin plugin = Plugin("plugin", &sm);
+  plugin.setVar("var1", 42);
+  ASSERT_EQ(sm.compute.store.getVarInt("plugin.var1"), 42);
+
+  plugin.setVar("var2", 137.0f);
+  ASSERT_FLOAT_EQ(sm.compute.store.getVarFloat("plugin.var2"), 137.0f);
 }
 
 int main(int argc, char **argv)

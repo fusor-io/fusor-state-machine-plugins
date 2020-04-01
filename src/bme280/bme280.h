@@ -14,9 +14,7 @@ class bme280 : public Plugin
 public:
     bme280(StateMachineController *, int, int, bool useDefaultPort = true);
 
-    //BME280I2C sensor;
-
-    static std::vector<PLUGIN_ACTION> actions;
+    BME280I2C sensor;
 
 private:
     int _sdaPin;
