@@ -6,7 +6,7 @@
 #include <BME280.h>
 #include <BME280I2C.h>
 
-#include "../plugin.h"
+#include <plugin.h>
 #include <StateMachine.h>
 
 class bme280 : public Plugin
