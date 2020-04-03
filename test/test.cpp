@@ -7,7 +7,7 @@
 #include <ArduinoJson.h>
 #include <StateMachine.h>
 
-#include "../src/bme280/bme280.h"
+#include "../src/Bme280Plugin.h"
 
 unsigned long _time = 0;
 unsigned long getTime() { return _time; }

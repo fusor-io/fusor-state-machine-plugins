@@ -4,15 +4,15 @@
 #include <BME280.h>
 #include <BME280I2C.h>
 
-#include "bme280.h"
+#include "Bme280Plugin.h"
 
 /**
  * Plugin for BME280 library by Tyler Glenn 
  */
 
-void init(Plugin *plugin)
+void initAction(Plugin *plugin)
 {
-    BME280I2C bme = ((bme280 *)plugin)->sensor;
+    BME280I2C bme = ((Bme280Plugin *)plugin)->sensor;
     while (!bme.begin())
     {
         // We are allowed to use delay in setup action
@@ -23,9 +23,9 @@ void init(Plugin *plugin)
     }
 }
 
-void read(Plugin *plugin)
+void readAction(Plugin *plugin)
 {
-    BME280I2C bme = ((bme280 *)plugin)->sensor;
+    BME280I2C bme = ((Bme280Plugin *)plugin)->sensor;
 
     float temp(FLT_MIN), hum(FLT_MIN), pres(FLT_MIN);
     BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
@@ -60,12 +60,12 @@ BME280I2C::Settings i2c_0x77(
     BME280::SpiEnable_False,
     0x77);
 
-bme280::bme280(StateMachineController *sm, int sdaPin, int sclPin, bool useDefaultPort)
+Bme280Plugin::Bme280Plugin(StateMachineController *sm, int sdaPin, int sclPin, bool useDefaultPort)
     : Plugin("bme280", sm), sensor(useDefaultPort ? i2c_0x76 : i2c_0x77)
 {
     _sdaPin = sdaPin;
     _sclPin = sclPin;
 
-    registerAction("init", init);
-    registerAction("read", read);
+    registerAction("init", initAction);
+    registerAction("read", readAction);
 }

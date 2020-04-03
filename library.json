@@ -1,7 +1,7 @@
 {
   "name": "StateMachinePlugins",
   "keywords": "sate machine, automation, iot, sensors",
-  "description": "=Collection of plugins for popular Arduino periferials",
+  "description": "Collection of plugins for popular Arduino periferials",
   "homepage": "",
   "repository": {
     "type": "git",

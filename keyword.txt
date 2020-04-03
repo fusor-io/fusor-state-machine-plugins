@@ -6,7 +6,7 @@
 # Datatypes (KEYWORD1)
 #######################################
  
-bme280  KEYWORD1
+Bme280Plugin  KEYWORD1
  
 #######################################
 # Methods and Functions (KEYWORD2)

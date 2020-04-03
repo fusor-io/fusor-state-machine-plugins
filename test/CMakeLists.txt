@@ -22,11 +22,11 @@ include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/store)
 include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/compute)
 include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/plugin)
 include_directories(${ARDUINO_LIB_ROOT}/BME280/src)
-include_directories(../src/plugin/bme280)
+include_directories(../src/Bme280Plugin)
 
 #Link runTests with what we want to test and the GTest and pthread library
 add_executable(executeTests test.cpp 
-    ../src/bme280/bme280.cpp
+    ../src/Bme280Plugin.cpp
     mock/Wire.cpp
     ${ARDUINO_LIB_ROOT}/BME280/src/BME280.cpp ${ARDUINO_LIB_ROOT}/BME280/src/BME280I2C.cpp
     ${ARDUINO_LIB_ROOT}/StateMachine/src/StateMachine.cpp
