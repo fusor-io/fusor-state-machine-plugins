@@ -9,9 +9,13 @@
 class Bme280Plugin : public Plugin
 {
 public:
-    Bme280Plugin(StateMachineController *, int, int, bool useDefaultPort = true);
+    Bme280Plugin(StateMachineController *, bool useFirstPort = true);
 
     BME280I2C sensor;
+    bool isConnected = false;
+
+    bool init();
+    void read();
 
 private:
     int _sdaPin;
