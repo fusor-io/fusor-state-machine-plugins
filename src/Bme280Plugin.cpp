@@ -52,8 +52,8 @@ void readAction(Plugin *plugin)
     ((Bme280Plugin *)plugin)->read();
 }
 
-Bme280Plugin::Bme280Plugin(StateMachineController *sm, bool useFirstPort)
-    : Plugin("bme280", sm), sensor(useFirstPort ? i2c_0x76 : i2c_0x77)
+Bme280Plugin::Bme280Plugin(const char *sensorId, StateMachineController *sm, bool useFirstPort)
+    : Plugin(sensorId, sm), sensor(useFirstPort ? i2c_0x76 : i2c_0x77)
 {
     registerAction("init", initAction);
     registerAction("read", readAction);
