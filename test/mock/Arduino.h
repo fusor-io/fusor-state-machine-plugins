@@ -15,5 +15,16 @@ typedef unsigned int __uint32_t;
 typedef __uint32_t uint32_t;
 
 inline void delay(unsigned long) {}
+inline void attachInterrupt(int, void (*)(), int){};
+inline int digitalPinToInterrupt(int){};
+
+inline void pinMode(int, int){};
+
+#define INPUT_PULLUP 0
+
+#define IRAM_ATTR
+
+#define RISING 0
+#define FALLING 0
 
 #endif

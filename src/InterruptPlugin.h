@@ -8,7 +8,7 @@ typedef void (*InterruptCallback)();
 class InterruptPlugin : public Plugin
 {
 public:
-    InterruptPlugin(const char *, StateMachineController *, uint8_t);
+    InterruptPlugin(const char *, uint8_t);
 
     uint8_t pin;
     int slotNum;

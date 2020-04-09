@@ -42,21 +42,21 @@ BME280I2C::Settings i2c_0x77(
     BME280::SpiEnable_False,
     0x77);
 
-void initAction(Plugin *plugin)
+void bme280InitAction(Plugin *plugin)
 {
     ((Bme280Plugin *)plugin)->init();
 }
 
-void readAction(Plugin *plugin)
+void bme280ReadAction(Plugin *plugin)
 {
     ((Bme280Plugin *)plugin)->read();
 }
 
-Bme280Plugin::Bme280Plugin(const char *sensorId, StateMachineController *sm, bool useFirstPort)
-    : Plugin(sensorId, sm), sensor(useFirstPort ? i2c_0x76 : i2c_0x77)
+Bme280Plugin::Bme280Plugin(const char *sensorId, bool useFirstPort)
+    : Plugin(sensorId), sensor(useFirstPort ? i2c_0x76 : i2c_0x77)
 {
-    registerAction("init", initAction);
-    registerAction("read", readAction);
+    registerAction("init", bme280InitAction);
+    registerAction("read", bme280ReadAction);
 }
 
 bool Bme280Plugin::init()
