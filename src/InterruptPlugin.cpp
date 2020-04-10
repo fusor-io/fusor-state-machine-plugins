@@ -4,27 +4,37 @@
 #define MAX_INTERRUPTS 8
 
 // Tracking of Interrupt plugin instances
-int registeredInterrupts = 0;
+int _registeredInterrupts = 0;
 
 // Pointers to StateMachine Store variables
-VarStruct *isPressed[MAX_INTERRUPTS] = {nullptr};
-volatile bool wasClicked[MAX_INTERRUPTS] = {false};
+uint8_t _slotMap[MAX_INTERRUPTS];
+unsigned long _interruptFilters[MAX_INTERRUPTS];
+unsigned long _interruptTimeouts[MAX_INTERRUPTS];
 
-#define INT_FN(num)                    \
-    void IRAM_ATTR pinFall##num()      \
-    {                                  \
-        isPressed[num]->vInt = 1;      \
-        isPressed[num]->vFloat = 1.0f; \
-        wasClicked[num] = true;        \
-    }                                  \
-    void IRAM_ATTR pinRise##num()      \
-    {                                  \
-        isPressed[num]->vInt = 0;      \
-        isPressed[num]->vFloat = 0.0f; \
+VarStruct *_isPressed[MAX_INTERRUPTS] = {nullptr};
+volatile bool _wasClicked[MAX_INTERRUPTS] = {false};
+
+void IRAM_ATTR _pinChange(int num)
+{
+    if (digitalRead(_slotMap[num]))
+    {
+        if ((micros() - _interruptTimeouts[num]) > _interruptFilters[num])
+            _wasClicked[num] = true;
+        _isPressed[num]->vInt = 1;
+        _isPressed[num]->vFloat = 1.0f;
+        _interruptTimeouts[num] = micros();
     }
-#define ATTACH_FN(pin, fn_num)                     \
-    attachInterrupt(pin, pinRise##fn_num, RISING); \
-    attachInterrupt(pin, pinFall##fn_num, FALLING);
+    else
+    {
+        _isPressed[num]->vInt = 0;
+        _isPressed[num]->vFloat = 0.0f;
+    }
+}
+
+#define INT_FN(num) \
+    void IRAM_ATTR pinChange##num() { _pinChange(num); }
+#define ATTACH_FN(pin, fn_num) \
+    attachInterrupt(pin, pinChange##fn_num, CHANGE);
 
 // Unique interrupt handler functions
 
@@ -51,15 +61,17 @@ void interruptReadAction(Plugin *plugin)
     ((InterruptPlugin *)plugin)->read();
 }
 
-InterruptPlugin::InterruptPlugin(const char *instanceId, uint8_t pin)
+InterruptPlugin::InterruptPlugin(const char *instanceId, uint8_t pin, unsigned long filter)
     : Plugin(instanceId)
 {
     this->pin = pin;
-    slotNum = registeredInterrupts++;
+    slotNum = _registeredInterrupts++;
     if (slotNum < MAX_INTERRUPTS)
     {
         registerAction("attach", interruptAttachAction);
         registerAction("read", interruptReadAction);
+        _interruptFilters[slotNum] = filter;
+        _interruptTimeouts[slotNum] = micros();
     }
 }
 
@@ -68,14 +80,16 @@ void InterruptPlugin::read()
     if (slotNum >= MAX_INTERRUPTS)
         return;
 
-    setVar("click", wasClicked[slotNum] ? 1 : 0);
-    wasClicked[slotNum] = false;
+    setVar("click", _wasClicked[slotNum] ? 1 : 0);
+    _wasClicked[slotNum] = false;
 }
 
 void InterruptPlugin::attach()
 {
     if (slotNum >= MAX_INTERRUPTS)
         return;
+
+    _slotMap[slotNum] = pin;
 
     // initialize variables (allocate memory for them)
     setVar("click", 0);
@@ -84,12 +98,12 @@ void InterruptPlugin::attach()
     // Store pointer to a raw variable value.
     // Variable itself is already created in constructor
 
-    isPressed[slotNum] = getVarRaw("state");
+    _isPressed[slotNum] = getVarRaw("state");
 
     // Attach interrupt listener.
     // Listener will update variable directly by writing to memory address
 
-    pinMode(pin, INPUT_PULLUP);
+    pinMode(pin, INPUT);
     int mappedPin = digitalPinToInterrupt(pin);
     switch (slotNum)
     {
