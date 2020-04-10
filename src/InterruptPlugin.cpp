@@ -28,30 +28,7 @@ volatile bool wasClicked[MAX_INTERRUPTS] = {false};
 
 // Unique interrupt handler functions
 
-void IRAM_ATTR pinFall0()
-{
-    VarStruct *p = isPressed[0];
-    if (p == nullptr)
-    {
-        p->vInt = 1;
-        p->vFloat = 1.0f;
-        wasClicked[0] = true;
-    }
-    else
-    {
-        p->vInt = 2;
-        p->vFloat = 2.0f;
-        wasClicked[0] = true;
-    }
-}
-void IRAM_ATTR pinRise0()
-{
-    VarStruct *p = isPressed[0];
-    p->vInt = 0;
-    p->vFloat = 0.0f;
-}
-
-// INT_FN(0);
+INT_FN(0);
 INT_FN(1);
 INT_FN(2);
 INT_FN(3);
