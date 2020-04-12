@@ -21,15 +21,18 @@ include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/keycreate)
 include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/timers)
 include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/store)
 include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/compute)
+include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/actioncontext)
 include_directories(${ARDUINO_LIB_ROOT}/StateMachine/src/plugin)
 include_directories(${ARDUINO_LIB_ROOT}/BME280/src)
 include_directories(../src/Bme280Plugin)
 include_directories(../src/InterruptPlugin)
+include_directories(../src/PinPlugin)
 
 #Link runTests with what we want to test and the GTest and pthread library
 add_executable(executeTests test.cpp 
     ../src/Bme280Plugin.cpp
     ../src/InterruptPlugin.cpp
+    ../src/PinPlugin.cpp
     mock/Wire.cpp
     ${ARDUINO_LIB_ROOT}/BME280/src/BME280.cpp ${ARDUINO_LIB_ROOT}/BME280/src/BME280I2C.cpp
     ${ARDUINO_LIB_ROOT}/StateMachine/src/StateMachine.cpp
@@ -38,6 +41,7 @@ add_executable(executeTests test.cpp
     ${ARDUINO_LIB_ROOT}/StateMachine/src/timers/timers.cpp
     ${ARDUINO_LIB_ROOT}/StateMachine/src/store/store.cpp
     ${ARDUINO_LIB_ROOT}/StateMachine/src/compute/compute.cpp
+    ${ARDUINO_LIB_ROOT}/StateMachine/src/actioncontext/actioncontext.cpp
     ${ARDUINO_LIB_ROOT}/StateMachine/src/plugin/plugin.cpp
 )
 target_link_libraries(executeTests ${GTEST_LIBRARIES} pthread)

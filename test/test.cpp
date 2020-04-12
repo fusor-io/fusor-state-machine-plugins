@@ -11,6 +11,7 @@
 
 #include "../src/Bme280Plugin.h"
 #include "../src/InterruptPlugin.h"
+#include "../src/PinPlugin.h"
 
 unsigned long _time = 0;
 unsigned long getTime() { return _time; }
@@ -22,7 +23,6 @@ void debugPrinter(const char *message)
 
 TEST(Plugin, setVar)
 {
-  __debug_printer = debugPrinter;
   StateMachineController sm = StateMachineController("test", NULL, getTime);
   Plugin plugin = Plugin("plugin");
   plugin.setVar("var1", 42);
