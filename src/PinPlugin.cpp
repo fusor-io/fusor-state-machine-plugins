@@ -54,7 +54,10 @@ void PinPlugin::initialize(StateMachineController *sm)
 
 void PinPlugin::read()
 {
-    setVar("value", mode == PIN_DIGITAL ? digitalRead(pin) : analogRead(pin));
+    int value = mode == PIN_DIGITAL ? digitalRead(pin) : analogRead(pin);
+    int oldValue = getVarInt("value", -1);
+    if (value != oldValue)
+        setVar("value", value);
 }
 
 void PinPlugin::write()

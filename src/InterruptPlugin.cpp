@@ -80,7 +80,10 @@ void InterruptPlugin::read()
     if (slotNum >= MAX_INTERRUPTS)
         return;
 
-    setVar("click", _wasClicked[slotNum] ? 1 : 0);
+    int oldValue = getVarInt("click", -1);
+    int value = _wasClicked[slotNum] ? 1 : 0;
+    if (value != oldValue)
+        setVar("click", value);
     _wasClicked[slotNum] = false;
 }
 
