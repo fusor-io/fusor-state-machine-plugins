@@ -29,10 +29,10 @@
 #define DEFAULT_PEAK_START_HOUR_GMT 5
 #define DEFAULT_PEAK_END_HOUR_GMT 21
 
-class PowerSensor : public Plugin
+class PowerSensorPlugin : public Plugin
 {
 public:
-    PowerSensor(const char *, uint8_t);
+    PowerSensorPlugin(const char *, uint8_t);
     void read();
 
 private:

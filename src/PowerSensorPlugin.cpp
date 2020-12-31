@@ -19,22 +19,22 @@
  *      "off_peak" - momentary value of off-peak time electric metter, kw/h
  */
 
-#include "PowerSensor.h"
+#include "PowerSensorPlugin.h"
 
 void readSensor(Plugin *plugin)
 {
-    ((PowerSensor *)plugin)->read();
+    ((PowerSensorPlugin *)plugin)->read();
 }
 
-PowerSensor::PowerSensor(const char *instanceId, uint8_t pin) : Plugin(instanceId)
+PowerSensorPlugin::PowerSensorPlugin(const char *instanceId, uint8_t pin) : Plugin(instanceId)
 {
     _pin = pin;
     registerAction("read", readSensor);
 }
 
-void PowerSensor::read()
+void PowerSensorPlugin::read()
 {
-    float watts = _readPowerSensor();
+    float watts = _readPowerSensorPlugin();
     unsigned long durationMs = getElapsedTime(_lastPowerCheckPoint);
     _lastPowerCheckPoint = millis();
 
@@ -50,7 +50,7 @@ void PowerSensor::read()
         setVar(VAR_OFF_PEAK_METTER, getVarFloat(VAR_OFF_PEAK_METTER) + segmentEnergy);
 }
 
-bool PowerSensor::_isPeakTime()
+bool PowerSensorPlugin::_isPeakTime()
 {
     uint8_t wd = weekday();
     if (wd == 1 || wd == 7)
@@ -64,7 +64,7 @@ bool PowerSensor::_isPeakTime()
     return hr >= peakStart && hr < peakEnd;
 }
 
-unsigned long PowerSensor::_getWaveAmplitude()
+unsigned long PowerSensorPlugin::_getWaveAmplitude()
 {
     unsigned long waveMin = ULONG_MAX;
     unsigned long waveMax = 0UL;
@@ -85,7 +85,7 @@ unsigned long PowerSensor::_getWaveAmplitude()
     return (waveMax - waveMin);
 }
 
-float PowerSensor::_readPowerSensor()
+float PowerSensorPlugin::_readPowerSensorPlugin()
 {
     unsigned long averageAmplitude = 0;
 
