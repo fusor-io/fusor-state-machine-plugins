@@ -23,6 +23,11 @@
 #define VAR_TOTAL_METTER "total"
 #define VAR_PEAK_METTER "peak"
 #define VAR_OFF_PEAK_METTER "off_peak"
+#define VAR_PEAK_START_HOUR "peak_start"
+#define VAR_PEAK_END_HOUR "peak_end"
+
+#define DEFAULT_PEAK_START_HOUR_GMT 5
+#define DEFAULT_PEAK_END_HOUR_GMT 21
 
 class PowerSensor : public Plugin
 {

@@ -6,6 +6,8 @@
  * Input variables:
  *      "coef_p" - coefficient used to translate AC current amplitude 
  *                 measured as voltage on analog input into Watts
+ *      "peak_start" - peak start time in GMT timezone (local device time)
+ *      "peak_end" - peak start time in GMT timezone (local device time)
  *      "total" - initial electric metter readings, kw/h
  *      "peak" - initial peak time electric metter readings, kw/h
  *      "off_peak" - initial off-peak time electric metter readings, kw/h
@@ -50,13 +52,16 @@ void PowerSensor::read()
 
 bool PowerSensor::_isPeakTime()
 {
-    int wd = weekday();
+    uint8_t wd = weekday();
     if (wd == 1 || wd == 7)
         return false;
-    int hr = hour();
-    if (hr >= 5 && hr < 21)
-        return true; // GMT0 time
-    return false;
+
+    uint8_t hr = hour();
+
+    uint8_t peakStart = getVarInt(VAR_PEAK_START_HOUR, DEFAULT_PEAK_START_HOUR_GMT);
+    uint8_t peakEnd = getVarInt(VAR_PEAK_END_HOUR, DEFAULT_PEAK_END_HOUR_GMT);
+
+    return hr >= peakStart && hr < peakEnd;
 }
 
 unsigned long PowerSensor::_getWaveAmplitude()
