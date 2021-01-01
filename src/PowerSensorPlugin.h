@@ -25,6 +25,7 @@
 #define VAR_OFF_PEAK_METTER "off_peak"
 #define VAR_PEAK_START_HOUR "peak_start"
 #define VAR_PEAK_END_HOUR "peak_end"
+#define VAR_IS_PEAK "is_peak"
 
 #define DEFAULT_PEAK_START_HOUR_GMT 5
 #define DEFAULT_PEAK_END_HOUR_GMT 21
@@ -43,7 +44,7 @@ private:
 
     bool _isPeakTime();
     unsigned long _getWaveAmplitude();
-    float _readPowerSensor();
+    float _readSensor();
 };
 
 #endif

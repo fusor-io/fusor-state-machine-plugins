@@ -17,6 +17,7 @@
  *      "total" - momentary value of electric metter. kw/h
  *      "peak" - momentary value of peak time electric metter, kw/h
  *      "off_peak" - momentary value of off-peak time electric metter, kw/h
+ *      "is_peak" - indicates if now is peak time (1) or not (0)
  */
 
 #include "PowerSensorPlugin.h"
@@ -29,12 +30,13 @@ void readSensor(Plugin *plugin)
 PowerSensorPlugin::PowerSensorPlugin(const char *instanceId, uint8_t pin) : Plugin(instanceId)
 {
     _pin = pin;
+    pinMode(pin, INPUT);
     registerAction("read", readSensor);
 }
 
 void PowerSensorPlugin::read()
 {
-    float watts = _readPowerSensorPlugin();
+    float watts = _readSensor();
     unsigned long durationMs = getElapsedTime(_lastPowerCheckPoint);
     _lastPowerCheckPoint = millis();
 
@@ -45,9 +47,15 @@ void PowerSensorPlugin::read()
     setVar(VAR_TOTAL_METTER, getVarFloat(VAR_TOTAL_METTER) + segmentEnergy);
 
     if (_isPeakTime())
+    {
         setVar(VAR_PEAK_METTER, getVarFloat(VAR_PEAK_METTER) + segmentEnergy);
+        setVar(VAR_IS_PEAK, 1L);
+    }
     else
+    {
         setVar(VAR_OFF_PEAK_METTER, getVarFloat(VAR_OFF_PEAK_METTER) + segmentEnergy);
+        setVar(VAR_IS_PEAK, 0L);
+    }
 }
 
 bool PowerSensorPlugin::_isPeakTime()
@@ -85,7 +93,7 @@ unsigned long PowerSensorPlugin::_getWaveAmplitude()
     return (waveMax - waveMin);
 }
 
-float PowerSensorPlugin::_readPowerSensorPlugin()
+float PowerSensorPlugin::_readSensor()
 {
     unsigned long averageAmplitude = 0;
 

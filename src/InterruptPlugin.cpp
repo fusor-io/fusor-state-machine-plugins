@@ -14,7 +14,11 @@ unsigned long _interruptTimeouts[MAX_INTERRUPTS];
 VarStruct *_isPressed[MAX_INTERRUPTS] = {nullptr};
 volatile bool _wasClicked[MAX_INTERRUPTS] = {false};
 
+#ifdef ESP32
 void IRAM_ATTR _pinChange(int num)
+#else
+void ICACHE_RAM_ATTR _pinChange(int num)
+#endif
 {
     if (digitalRead(_slotMap[num]))
     {
@@ -31,8 +35,14 @@ void IRAM_ATTR _pinChange(int num)
     }
 }
 
+#ifdef ESP32
 #define INT_FN(num) \
     void IRAM_ATTR pinChange##num() { _pinChange(num); }
+#else
+#define INT_FN(num) \
+    void ICACHE_RAM_ATTR pinChange##num() { _pinChange(num); }
+#endif
+
 #define ATTACH_FN(pin, fn_num) \
     attachInterrupt(pin, pinChange##fn_num, CHANGE);
 
