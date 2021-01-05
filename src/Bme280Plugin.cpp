@@ -2,6 +2,7 @@
 #include <math.h>
 #include <StateMachine.h>
 
+#include <Wire.h>
 #include <BME280.h>
 #include <BME280I2C.h>
 
@@ -52,9 +53,11 @@ void bme280ReadAction(Plugin *plugin)
     ((Bme280Plugin *)plugin)->read();
 }
 
-Bme280Plugin::Bme280Plugin(const char *sensorId, bool useFirstPort)
+Bme280Plugin::Bme280Plugin(const char *sensorId, bool useFirstPort, int sdaPin, int sclPin)
     : Plugin(sensorId), sensor(useFirstPort ? i2c_0x76 : i2c_0x77)
 {
+    _sdaPin = sdaPin;
+    _sclPin = sclPin;
     registerAction("init", bme280InitAction);
     registerAction("read", bme280ReadAction);
 }
@@ -65,7 +68,7 @@ bool Bme280Plugin::init()
 
     for (int i = 0; i < 10; i++)
     {
-        if (sensor.begin())
+        if (_begin())
         {
             isConnected = true;
             switch (sensor.chipModel())
@@ -84,6 +87,7 @@ bool Bme280Plugin::init()
         delay(500);
     }
 
+    Serial.println(F("Unable to connect to BME280 sensor"));
     return false;
 }
 
@@ -108,4 +112,11 @@ void Bme280Plugin::read()
     setVar("pres_hpa", pres);
     setVar("temp_c", temp);
     setVar("hum", hum);
+}
+
+bool Bme280Plugin::_begin()
+{
+    if (_sdaPin > -1 && _sclPin > -1)
+        Wire.begin(_sdaPin, _sclPin);
+    return sensor.begin();
 }

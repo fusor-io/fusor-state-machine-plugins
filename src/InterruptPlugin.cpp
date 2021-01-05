@@ -75,6 +75,7 @@ InterruptPlugin::InterruptPlugin(const char *instanceId, uint8_t pin, unsigned l
     : Plugin(instanceId)
 {
     this->pin = pin;
+    
     slotNum = _registeredInterrupts++;
     if (slotNum < MAX_INTERRUPTS)
     {
@@ -99,6 +100,11 @@ void InterruptPlugin::read()
 
 void InterruptPlugin::attach()
 {
+    Serial.print(F("Attaching "));
+    Serial.print(id);
+    Serial.print(F(" to pin "));
+    Serial.println(pin);
+
     if (slotNum >= MAX_INTERRUPTS)
         return;
 
