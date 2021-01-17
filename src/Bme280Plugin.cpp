@@ -18,9 +18,9 @@
 /**
  *  I2C settings with:
  *    16x oversampling - for better accuracy
- *    2x filter - for readings smoothing
+ *    16x filter - for readings smoothing
  *    Normal mode - for continuous data collection by chip
- *    Standby time 250ms - time between readings
+ *    Standby time 1000ms - time between readings
  */
 
 BME280I2C::Settings i2c_0x76(
@@ -28,8 +28,8 @@ BME280I2C::Settings i2c_0x76(
     BME280::OSR_X16,
     BME280::OSR_X16,
     BME280::Mode_Normal,
-    BME280::StandbyTime_250ms,
-    BME280::Filter_2,
+    BME280::StandbyTime_1000ms,
+    BME280::Filter_16,
     BME280::SpiEnable_False,
     0x76);
 
@@ -38,8 +38,8 @@ BME280I2C::Settings i2c_0x77(
     BME280::OSR_X16,
     BME280::OSR_X16,
     BME280::Mode_Normal,
-    BME280::StandbyTime_250ms,
-    BME280::Filter_2,
+    BME280::StandbyTime_1000ms,
+    BME280::Filter_16,
     BME280::SpiEnable_False,
     0x77);
 
