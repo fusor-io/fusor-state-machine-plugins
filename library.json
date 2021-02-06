@@ -1,16 +1,16 @@
 {
   "name": "StateMachinePlugins",
   "keywords": "sate machine, automation, iot, sensors",
-  "description": "Collection of plugins for popular Arduino periferials",
-  "homepage": "",
+  "description": "Collection of plugins for popular Arduino peripherals. Part of Fusor ecosystem",
+  "homepage": "http://fusor.io",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/superglue777/statemachineplugins.git"
+    "url": "https://github.com/fusor-io/fusor-state-machine-plugins"
   },
   "version": "1.0.0",
   "authors": {
     "name": "Giedrius Lukosevicius",
-    "url": ""
+    "url": "https://www.linkedin.com/in/glukosev/"
   },
   "exclude": ["test"],
   "frameworks": "arduino",
