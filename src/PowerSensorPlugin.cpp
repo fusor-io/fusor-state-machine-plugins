@@ -22,7 +22,7 @@
 
 #include "PowerSensorPlugin.h"
 
-void readSensor(Plugin *plugin)
+void _readPowerSensor(Plugin *plugin)
 {
     ((PowerSensorPlugin *)plugin)->read();
 }
@@ -31,7 +31,7 @@ PowerSensorPlugin::PowerSensorPlugin(const char *instanceId, uint8_t pin) : Plug
 {
     _pin = pin;
     pinMode(pin, INPUT);
-    registerAction("read", readSensor);
+    registerAction("read", _readPowerSensor);
 }
 
 void PowerSensorPlugin::read()
