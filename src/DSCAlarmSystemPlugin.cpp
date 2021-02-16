@@ -1,6 +1,5 @@
 #include "DSCAlarmSystemPlugin.h"
 
-
 /**
  * Plugin for connecting into DSC based alarm system communication wires.
  * It only allows reading system state and events. No write operatins supported.
@@ -414,19 +413,25 @@ void DSCAlarmSystemPlugin::updateVariables()
 
 void DSCAlarmSystemPlugin::read()
 {
+    Serial.print("<");
     initRegister(); // prepare registers for new data
 
     // our idle time is max 20ms, reduce it to 18 to be on a safe size
     // if we are out of this time, we need to resync
-    if (getElapsedTime(lastDecodingTime) > 18)
+    if (getElapsedTime(lastDecodingTime) > 18) {
+        Serial.print("r");
         resync();
+    }
 
+    Serial.print("s");
     skipUntilSyncEnd();
 
+    Serial.print("b");
     readBits();
 
     lastDecodingTime = millis();
 
+    Serial.print("s");
     waitForSyncStart(); // we will spend here ~1ms
 
     // from this moment we have only 20-1 = 19 ms
@@ -437,11 +442,20 @@ void DSCAlarmSystemPlugin::read()
     //  - casually read configs by WiFi
     //  - enter new state machine cycle
 
-    if (!bitsReady)
-        return; // probably this is our first run, no info collected yet
+    // if it is false, probably this is our first run, no info collected yet
+    if (bitsReady)
+    {
 
-    decodePacket();
+        Serial.print("d");
+        decodePacket();
 
-    if (isNewBits())
-        updateVariables();
+        Serial.print("t");
+        if (isNewBits())
+        {
+            Serial.print("u");
+            updateVariables();
+        }
+    }
+
+    Serial.println(">");
 }
