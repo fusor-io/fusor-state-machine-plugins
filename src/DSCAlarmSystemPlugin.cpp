@@ -380,34 +380,32 @@ void DSCAlarmSystemPlugin::updateVariables()
     if (!isCRCOK)
         return;
 
-    Store *store = &(sm->compute.store);
-
     if (cmd == 0x05 || cmd == 0x27 || cmd == 0x2D || cmd == 0x34 || cmd == 0x3E)
     {
 
-        isFireVar = store->updateVar(isFireVar, PROP_FIRE, (long int)isFire);
-        isProgramVar = store->updateVar(isProgramVar, PROP_PROGRAM, (long int)isProgram);
-        isBypassVar = store->updateVar(isBypassVar, PROP_BYPASS, (long int)isBypass);
-        isMemoryVar = store->updateVar(isMemoryVar, PROP_MEMORY, (long int)isMemory);
-        isArmedSignVar = store->updateVar(isArmedSignVar, PROP_ARMED_SIGN, (long int)isArmedSign);
-        isReadyVar = store->updateVar(isReadyVar, PROP_READY, (long int)isReady);
-        isCleanVar = store->updateVar(isCleanVar, PROP_CLEAN, (long int)isClean);
-        isZoneActiveVar = store->updateVar(isZoneActiveVar, PROP_ZONE_OPEN, (long int)isZoneActive);
-        isPerimeterOpenVar = store->updateVar(isPerimeterOpenVar, PROP_PERIMETER_OPEN, (long int)isPerimeterOpen);
-        isArmedVar = store->updateVar(isArmedVar, PROP_ARMED, (long int)isArmed);
-        isExitDelayVar = store->updateVar(isExitDelayVar, PROP_EXIT_DELAY, (long int)isExitDelay);
+        isFireVar = updateVar(isFireVar, PROP_FIRE, (long int)isFire);
+        isProgramVar = updateVar(isProgramVar, PROP_PROGRAM, (long int)isProgram);
+        isBypassVar = updateVar(isBypassVar, PROP_BYPASS, (long int)isBypass);
+        isMemoryVar = updateVar(isMemoryVar, PROP_MEMORY, (long int)isMemory);
+        isArmedSignVar = updateVar(isArmedSignVar, PROP_ARMED_SIGN, (long int)isArmedSign);
+        isReadyVar = updateVar(isReadyVar, PROP_READY, (long int)isReady);
+        isCleanVar = updateVar(isCleanVar, PROP_CLEAN, (long int)isClean);
+        isZoneActiveVar = updateVar(isZoneActiveVar, PROP_ZONE_OPEN, (long int)isZoneActive);
+        isPerimeterOpenVar = updateVar(isPerimeterOpenVar, PROP_PERIMETER_OPEN, (long int)isPerimeterOpen);
+        isArmedVar = updateVar(isArmedVar, PROP_ARMED, (long int)isArmed);
+        isExitDelayVar = updateVar(isExitDelayVar, PROP_EXIT_DELAY, (long int)isExitDelay);
 
         for (uint8_t i = 0; i < 32; i++)
-            sensorVars[i] = store->updateVar(sensorVars[i], zonesIds[i], (long int)zones[i]);
+            sensorVars[i] = updateVar(sensorVars[i], zonesIds[i], (long int)zones[i]);
 
-        isExitDelayVar = store->updateVar(isExitDelayVar, PROP_EXIT_DELAY, (long int)isExitDelay);
+        isExitDelayVar = updateVar(isExitDelayVar, PROP_EXIT_DELAY, (long int)isExitDelay);
 
         // just reset this as we only getting "on" event
-        beepVar = store->updateVar(beepVar, PROP_BEEPS, 0L);
+        beepVar = updateVar(beepVar, PROP_BEEPS, 0L);
     }
     else if (cmd == 0x64)
     {
-        beepVar = store->updateVar(beepVar, PROP_BEEPS, (long int)beep);
+        beepVar = updateVar(beepVar, PROP_BEEPS, (long int)beep);
     }
 }
 
