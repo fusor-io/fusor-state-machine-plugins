@@ -415,8 +415,11 @@ void DSCAlarmSystemPlugin::read()
 
     // our idle time is max 20ms, reduce it to 18 to be on a safe side
     // if we are out of this time, we need to resync
-    if (getElapsedTime(lastDecodingTime) > 18) {
-        Serial.println("Resync");
+    unsigned long timeout = getElapsedTime(lastDecodingTime);
+    if (timeout > 18) {
+        Serial.print("Resync (");
+        Serial.print(timeout);
+        Serial.println("ms)");
         resync();
     }
 
