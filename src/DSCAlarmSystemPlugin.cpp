@@ -413,10 +413,12 @@ void DSCAlarmSystemPlugin::read()
 {
     initRegister(); // prepare registers for new data
 
-    // our idle time is max 20ms, reduce it to 18 to be on a safe size
+    // our idle time is max 20ms, reduce it to 18 to be on a safe side
     // if we are out of this time, we need to resync
-    if (getElapsedTime(lastDecodingTime) > 18)
+    if (getElapsedTime(lastDecodingTime) > 18) {
+        Serial.println("Resync");
         resync();
+    }
 
     skipUntilSyncEnd();
 
