@@ -16,28 +16,49 @@
  */
 
 /**
- *  I2C settings with:
- *    16x oversampling - for better accuracy
- *    16x filter - for readings smoothing
- *    Normal mode - for continuous data collection by chip
- *    Standby time 1000ms - time between readings
+ *  Recommended modes (based on Bosch BME280I2C environmental sensor data sheet)
+ *
+ *    Weather Monitoring :
+ *     forced mode, 1 sample/minute
+ *     pressure ×1, temperature ×1, humidity ×1, filter off
+ *     Current Consumption =  0.16 μA
+ *     RMS Noise = 3.3 Pa/30 cm, 0.07 %RH
+ *     Data Output Rate 1/60 Hz
+ *
+ *    Humidity Sensing :
+ *     forced mode, 1 sample/second
+ *     pressure ×0, temperature ×1, humidity ×1, filter off
+ *     Current Consumption = 2.9 μA
+ *     RMS Noise = 0.07 %RH
+ *     Data Output Rate =  1 Hz
+ *
+ *    Indoor Navigation :
+ *     normal mode, standby time = 0.5ms
+ *     pressure ×16, temperature ×2, humidity ×1, filter = x16
+ *     Current Consumption = 633 μA
+ *     RMS Noise = 0.2 Pa/1.7 cm
+ *     Data Output Rate = 25Hz
+ *     Filter Bandwidth = 0.53 Hz
+ *     Response Time (75%) = 0.9 s
  */
 
+// We default to blended mode for indoor weather station
+
 BME280I2C::Settings i2c_0x76(
-    BME280::OSR_X16,
-    BME280::OSR_X16,
-    BME280::OSR_X16,
-    BME280::Mode_Normal,
+    BME280::OSR_X4,  // temperature
+    BME280::OSR_X16, // pressure
+    BME280::OSR_X4,  // humidity
+    BME280::Mode_Forced,
     BME280::StandbyTime_1000ms,
     BME280::Filter_16,
     BME280::SpiEnable_False,
     0x76);
 
 BME280I2C::Settings i2c_0x77(
-    BME280::OSR_X16,
-    BME280::OSR_X16,
-    BME280::OSR_X16,
-    BME280::Mode_Normal,
+    BME280::OSR_X4,  // temperature
+    BME280::OSR_X16, // pressure
+    BME280::OSR_X4,  // humidity
+    BME280::Mode_Forced,
     BME280::StandbyTime_1000ms,
     BME280::Filter_16,
     BME280::SpiEnable_False,
